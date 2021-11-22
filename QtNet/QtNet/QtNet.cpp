@@ -23,7 +23,7 @@
 #include <pcl/kdtree/kdtree_flann.h>
 
 #define CV_IMWRITE_JPEG_QUALITY 1
-#define  SEVER_AIMARK "http://122.224.127.158:6060/facial_analysis" 
+#define  SEVER_AIMARK "ä½ çš„è¯·æ±‚ç½‘å€" 
 typedef pcl::PointXYZRGB PointT;
 typedef pcl::PointCloud<PointT> PointCloud;
 QtNet::QtNet(QWidget *parent)
@@ -64,7 +64,7 @@ void QtNet::DisplayMat(cv::Mat image)
 	{
 		cv::cvtColor(image, rgb, CV_BGR2RGB);
 		img = QImage((const unsigned char*)(rgb.data),
-			rgb.cols, rgb.rows, rgb.cols*rgb.channels(),//rgb.cols*rgb.channels()¿ÉÒÔÌæ»»Îªimage.step
+			rgb.cols, rgb.rows, rgb.cols*rgb.channels(),//rgb.cols*rgb.channels()å¯ä»¥æ›¿æ¢ä¸ºimage.step
 			QImage::Format_RGB888);
 	}
 	else
@@ -101,7 +101,7 @@ void QtNet::on_drawPoints_clicked()
 	}
 	else
 	{
-		QMessageBox::information(this, QString::fromLocal8Bit("ÌáÊ¾"), QString::fromLocal8Bit("·şÎñÆ÷Êı¾İ½âÎöÊ§°Ü£¬ÎŞ·¨»æÖÆ£¡"));
+		QMessageBox::information(this, QString::fromLocal8Bit("æç¤º"), QString::fromLocal8Bit("æœåŠ¡å™¨æ•°æ®è§£æå¤±è´¥ï¼Œæ— æ³•ç»˜åˆ¶ï¼"));
 	}
 }
 
@@ -111,16 +111,16 @@ void QtNet::on_finishMesh_clicked()
 	std::string plyPath = directoryPath + "/RGBL.ply";
 	std::string pcdSavePath = directoryPath + "/centreface.pcd";
 	pcl::io::loadPLYFile(plyPath,*centreFace);
-	//´Ó×îÖÕÈıÎ¬Ä£ĞÍÉÏ±£Áô³öÖĞ¼äÁ³ÇøÓò
+	//ä»æœ€ç»ˆä¸‰ç»´æ¨¡å‹ä¸Šä¿ç•™å‡ºä¸­é—´è„¸åŒºåŸŸ
 	PointT minPt, maxPt;
 	pcl::getMinMax3D(*centreFace, minPt, maxPt);
 	pcl::PointCloud<PointT>::Ptr cloud_filter(new pcl::PointCloud<PointT>);
-	pcl::PassThrough<PointT> pass;     //´´½¨ÂË²¨Æ÷¶ÔÏó
-	pass.setInputCloud(centreFace);                //ÉèÖÃ´ıÂË²¨µÄµãÔÆ
-	pass.setFilterFieldName("z");             //ÉèÖÃÔÚZÖá·½ÏòÉÏ½øĞĞÂË²¨
-	pass.setFilterLimits(maxPt.z - 0.08, maxPt.z);    //ÉèÖÃÂË²¨·¶Î§
-	pass.setFilterLimitsNegative(false);      //±£Áô
-	pass.filter(*cloud_filter);               //ÂË²¨²¢´æ´¢
+	pcl::PassThrough<PointT> pass;     //åˆ›å»ºæ»¤æ³¢å™¨å¯¹è±¡
+	pass.setInputCloud(centreFace);                //è®¾ç½®å¾…æ»¤æ³¢çš„ç‚¹äº‘
+	pass.setFilterFieldName("z");             //è®¾ç½®åœ¨Zè½´æ–¹å‘ä¸Šè¿›è¡Œæ»¤æ³¢
+	pass.setFilterLimits(maxPt.z - 0.08, maxPt.z);    //è®¾ç½®æ»¤æ³¢èŒƒå›´
+	pass.setFilterLimitsNegative(false);      //ä¿ç•™
+	pass.filter(*cloud_filter);               //æ»¤æ³¢å¹¶å­˜å‚¨
 	cloud_filter->height = 1;
 	cloud_filter->width = cloud_filter->points.size();
 	//pcl::io::savePCDFile(pcdSavePath, *cloud_filter);
@@ -128,9 +128,9 @@ void QtNet::on_finishMesh_clicked()
 	std::string depthPath = directoryPath +"/depthC.png";
 	cv::Mat depth=cv::imread(depthPath, cv::IMREAD_ANYDEPTH);
 	std::string inCamera = "../data/realsen2_cameraData.yml";
-	//½«¼ì²âµÃ¶şÎ¬¹Ø¼üµã×ªÎªÈıÎ¬µã¼¯£¬´ËÊ±µÄÈıÎ¬µã»¹²»ÊÇ×îÖÕÈıÎ¬Ä£ĞÍÉÏµÄÈıÎ¬µã
+	//å°†æ£€æµ‹å¾—äºŒç»´å…³é”®ç‚¹è½¬ä¸ºä¸‰ç»´ç‚¹é›†ï¼Œæ­¤æ—¶çš„ä¸‰ç»´ç‚¹è¿˜ä¸æ˜¯æœ€ç»ˆä¸‰ç»´æ¨¡å‹ä¸Šçš„ä¸‰ç»´ç‚¹
 	std::vector<cv::Point3f> _3dpoints = Compute2dto3d(depth, inCamera, facePoints);
-	//»Ö¸´³öµÄÈıÎ¬×ø±êÔö¼ÓÒ»¸öĞı×ª£¬ÒòÎª×îÖÕµÄÈıÎ¬Ä£ĞÍÎªÁËÕıÃæÏÔÊ¾Ôö¼ÓÁËÒ»¸öĞı×ª
+	//æ¢å¤å‡ºçš„ä¸‰ç»´åæ ‡å¢åŠ ä¸€ä¸ªæ—‹è½¬ï¼Œå› ä¸ºæœ€ç»ˆçš„ä¸‰ç»´æ¨¡å‹ä¸ºäº†æ­£é¢æ˜¾ç¤ºå¢åŠ äº†ä¸€ä¸ªæ—‹è½¬
 	pcl::PointCloud<PointT>::Ptr _3dcloud(new pcl::PointCloud<PointT>);
 	Eigen::Matrix4f RT;
 	RT << 0, 1, 0, 0,
@@ -152,9 +152,9 @@ void QtNet::on_finishMesh_clicked()
 	}
 	_3dcloud->width = _3dcloud->points.size();
 	_3dcloud->height = 1;
-	//½«»Ö¸´³öÀ´µÄÈıÎ¬µãÏŞÖÆÔÚÖĞ¼äÁ³ÇøÓò£¬´ËÊ±µÄÈıÎ¬µã¾ÍÊÇ×îÖÕµÄÈıÎ¬×ø±ê
-	//resultPoints ¾ÍÊÇ×îÖÕµÄÈıÎ¬µã¼¯
-	//_3dcloudÊÇ½«ÈıÎ¬µã¼¯¸³Öµ¸øÁËµãÔÆ£¬Éú³ÉplyÓÃÒÔÏÔÊ¾
+	//å°†æ¢å¤å‡ºæ¥çš„ä¸‰ç»´ç‚¹é™åˆ¶åœ¨ä¸­é—´è„¸åŒºåŸŸï¼Œæ­¤æ—¶çš„ä¸‰ç»´ç‚¹å°±æ˜¯æœ€ç»ˆçš„ä¸‰ç»´åæ ‡
+	//resultPoints å°±æ˜¯æœ€ç»ˆçš„ä¸‰ç»´ç‚¹é›†
+	//_3dcloudæ˜¯å°†ä¸‰ç»´ç‚¹é›†èµ‹å€¼ç»™äº†ç‚¹äº‘ï¼Œç”Ÿæˆplyç”¨ä»¥æ˜¾ç¤º
 	pcl::KdTreeFLANN<PointT> kdtreeNearst;
 	kdtreeNearst.setInputCloud(cloud_filter);
 	int nums = 1;
@@ -162,18 +162,18 @@ void QtNet::on_finishMesh_clicked()
 	//resultPoints.resize(_3dcloud->points.size());
 	for (int i = 0; i < _3dcloud->points.size();i++)
 	{
-		std::vector<int> pointIdxNKNSearch(nums);      //´æ´¢²éÑ¯µã½üÁÚË÷Òı
-		std::vector<float> pointNKNSquaredDistance(nums); //´æ´¢½üÁÚµã¶ÔÓ¦¾àÀëÆ½·½
+		std::vector<int> pointIdxNKNSearch(nums);      //å­˜å‚¨æŸ¥è¯¢ç‚¹è¿‘é‚»ç´¢å¼•
+		std::vector<float> pointNKNSquaredDistance(nums); //å­˜å‚¨è¿‘é‚»ç‚¹å¯¹åº”è·ç¦»å¹³æ–¹
 		PointT &_3dpoint = _3dcloud->points[i];
 		if ((kdtreeNearst.nearestKSearch(_3dpoint, nums, pointIdxNKNSearch, pointNKNSquaredDistance)) > 0)
 		{
 			cv::Point3d cvPoint;
 			int index = pointIdxNKNSearch[0];
-			//½«µã¸³Öµ¸øµãÔÆ£¬Éú³Éply
+			//å°†ç‚¹èµ‹å€¼ç»™ç‚¹äº‘ï¼Œç”Ÿæˆply
 			_3dpoint.x = cloud_filter->points[index].x;
 			_3dpoint.y = cloud_filter->points[index].y;
 			_3dpoint.z = cloud_filter->points[index].z;
-			//½«µã¸³Öµ¸øcv::Pointe3d¼¯ºÏ
+			//å°†ç‚¹èµ‹å€¼ç»™cv::Pointe3dé›†åˆ
 			cvPoint.x = cloud_filter->points[index].x;
 			cvPoint.y = cloud_filter->points[index].y;
 			cvPoint.z = cloud_filter->points[index].z;
@@ -182,7 +182,7 @@ void QtNet::on_finishMesh_clicked()
 	}
 	std::string savePath = directoryPath + "/3d.ply";
 	pcl::io::savePLYFile(savePath, *_3dcloud);
-	QMessageBox::information(this, QString::fromLocal8Bit("ÌáÊ¾"), QString::fromLocal8Bit("ÈıÎ¬µã»æÖÆ³É¹¦£¬ÒÑ´æ´¢ÖÁdataÎÄ¼ş¼ĞÖĞ£¡"));
+	QMessageBox::information(this, QString::fromLocal8Bit("æç¤º"), QString::fromLocal8Bit("ä¸‰ç»´ç‚¹ç»˜åˆ¶æˆåŠŸï¼Œå·²å­˜å‚¨è‡³dataæ–‡ä»¶å¤¹ä¸­ï¼"));
 }
 
 //void QtNet::slot_LoadImage()
@@ -256,7 +256,7 @@ bool QtNet::slot_recUploadImage(QNetworkReply *reply)
 		QList<QByteArray> dataList = data.split('@');
 		if (QString(dataList.first())=="0")
 		{
-			QMessageBox::information(this, QString::fromLocal8Bit("ÌáÊ¾"), QString::fromLocal8Bit("·şÎñÆ÷Êı¾İ½âÎöÊ§°Ü£¡"));
+			QMessageBox::information(this, QString::fromLocal8Bit("æç¤º"), QString::fromLocal8Bit("æœåŠ¡å™¨æ•°æ®è§£æå¤±è´¥ï¼"));
 			return false;
 		}
 		if (QString(dataList.first()) == "1")
@@ -277,7 +277,7 @@ bool QtNet::slot_recUploadImage(QNetworkReply *reply)
 							double x = obj.value(name).toObject().value("x").toString().toDouble();
 							double y = obj.value(name).toObject().value("y").toString().toDouble();
 							//Eigen::Matrix3i transMatrix;
-							//¼ì²âµÄ¹Ø¼üµãÊÇÄæÊ±ÕëĞı×ªÍ¼ÏñÉÏµÄ×ø±ê£¬Òò´Ë»¹µÃ½«×ø±êÓ³Éäµ½Ô­Í¼ÏñÉÏÈ¥
+							//æ£€æµ‹çš„å…³é”®ç‚¹æ˜¯é€†æ—¶é’ˆæ—‹è½¬å›¾åƒä¸Šçš„åæ ‡ï¼Œå› æ­¤è¿˜å¾—å°†åæ ‡æ˜ å°„åˆ°åŸå›¾åƒä¸Šå»
 							cv::Mat transMatrix = (cv::Mat_<double>(3, 3) << 0, -1, 1280,1, 0, 0,0, 0, 1);
 							cv::Mat srcPoint = (cv::Mat_<double>(3, 1) << x, y, 1);
 							cv::Mat tgtPoint = transMatrix*srcPoint;
@@ -287,20 +287,20 @@ bool QtNet::slot_recUploadImage(QNetworkReply *reply)
 						}
 					}
 				}
-				QMessageBox::information(this, QString::fromLocal8Bit("ÌáÊ¾"), QString::fromLocal8Bit("·şÎñÆ÷Êı¾İ½âÎö³É¹¦£¡"));
+				QMessageBox::information(this, QString::fromLocal8Bit("æç¤º"), QString::fromLocal8Bit("æœåŠ¡å™¨æ•°æ®è§£ææˆåŠŸï¼"));
 				return true;
 			}
 		}
 
 		if (QString(dataList.first()) != "1"&&QString(dataList.first())!="0")
 		{
-			QMessageBox::information(this, QString::fromLocal8Bit("ÌáÊ¾"), QString::fromLocal8Bit("·şÎñÆ÷Êı¾İ½âÎöÊ§°Ü£¡"));
+			QMessageBox::information(this, QString::fromLocal8Bit("æç¤º"), QString::fromLocal8Bit("æœåŠ¡å™¨æ•°æ®è§£æå¤±è´¥ï¼"));
 			return false;
 		}
 	}
 	else
 	{
-		QMessageBox::information(this, QString::fromLocal8Bit("ÌáÊ¾"), QString::fromLocal8Bit("·şÎñÆ÷Êı¾İ½âÎöÊ§°Ü£¡"));
+		QMessageBox::information(this, QString::fromLocal8Bit("æç¤º"), QString::fromLocal8Bit("æœåŠ¡å™¨æ•°æ®è§£æå¤±è´¥ï¼"));
 		return false;
 	}
 }
@@ -382,7 +382,7 @@ cv::Point3d subX(int x, int y, int xMin, const cv::Mat &depth)
 	}
 		return cv::Point3d();
 }
-//½«¶şÎ¬µãÓ³Éäµ½ÈıÎ¬Ä£ĞÍÉÏµÄÈıÎ¬µã
+//å°†äºŒç»´ç‚¹æ˜ å°„åˆ°ä¸‰ç»´æ¨¡å‹ä¸Šçš„ä¸‰ç»´ç‚¹
 std::vector<cv::Point3f> QtNet::Compute2dto3d(const cv::Mat & depth, const std::string & InCamera,  std::map<std::string, cv::Point2d>& _2dpoints)
 {
 	assert(_2dpoints.size() > 0);
@@ -405,8 +405,8 @@ std::vector<cv::Point3f> QtNet::Compute2dto3d(const cv::Mat & depth, const std::
 		{
 			std::vector<std::string> outPoints{ "GoR","ZyR","HairR","FtR","GoL","ZyL","HairL","FtL","Tr","Me" };
 			std::string pointName = it->first;
-			std::vector<std::string>::iterator result = std::find(outPoints.begin(), outPoints.end(), pointName); //²éÕÒÈİÒ×Ê§°ÜµÄµã
-			if (result != outPoints.end()) //µ±Ç°µãÊÇÈİÒ×³ö´íµÄµã
+			std::vector<std::string>::iterator result = std::find(outPoints.begin(), outPoints.end(), pointName); //æŸ¥æ‰¾å®¹æ˜“å¤±è´¥çš„ç‚¹
+			if (result != outPoints.end()) //å½“å‰ç‚¹æ˜¯å®¹æ˜“å‡ºé”™çš„ç‚¹
 			{
 				int index = std::distance(outPoints.begin(), result);
 				cv::Point3f _3dpoint;
